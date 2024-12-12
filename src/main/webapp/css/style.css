@@ -1,0 +1,130 @@
+html, body {
+    height:100%;
+    margin:0;
+    padding:0;
+    font-family: Arial, sans-serif;
+    background:#f7f2e8; /* теплый бежевый фон */
+    color:#333;
+}
+
+.wrapper {
+    display:flex;
+    flex-direction:column;
+    min-height:100%;
+}
+
+.top-nav {
+    background:#b5895c; /* Теплый коричневато-оранжевый цвет */
+    padding:10px;
+}
+.top-nav a {
+    color:#fff;
+    margin-right:10px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.main-container {
+    flex:1;
+    max-width:1000px;
+    margin:20px auto;
+    background:#fff;
+    padding:20px;
+    border-radius:5px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    margin-top:0;
+}
+
+.footer {
+    background:#b5895c;
+    color:#fff;
+    text-align:center;
+    padding:10px;
+    margin-top:auto;
+}
+
+.errorMessage {
+    background:#ffdddd;
+    border:1px solid #ff0000;
+    padding:10px;
+    margin-bottom:10px;
+    color:#a00;
+}
+
+.toolbar, .filter-form {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+button, input[type=submit], .button {
+    background:#b5895c;
+    color:#fff;
+    padding:8px 12px;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+}
+button:hover, input[type=submit]:hover, .button:hover {
+    background:#9e7a4c;
+}
+
+.task-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
+    gap:20px;
+}
+.task-card {
+    background:#faf8f5;
+    border:1px solid #ccc;
+    border-radius:5px;
+    padding:10px;
+    position:relative;
+}
+.task-card h3 {
+    margin-top:0;
+}
+.actions {
+    position:absolute;
+    top:10px; right:10px;
+    display:flex;
+    gap:5px;
+}
+.edit-btn, .delete-btn {
+    text-decoration:none;
+    background:#ddd;
+    color:#333;
+    padding:5px;
+    border-radius:3px;
+}
+.edit-btn:hover, .delete-btn:hover {
+    background:#bbb;
+}
+
+.pending { border-color: #89CFF0; }
+.done { border-color: #98FB98; opacity:0.9; }
+.archived { border-color: #FFA07A; opacity:0.9; }
+.overdue { border-color: #FF6347; }
+
+.subtasks {
+    margin-top:10px;
+}
+.subtasks details {
+    cursor:pointer;
+}
+
+label {
+    display:block; margin:10px 0 5px;
+}
+input[type=text], input[type=email], input[type=password], input[type=datetime-local], input[type=date], textarea, select {
+    width:100%;
+    padding:8px;
+    box-sizing:border-box;
+    border:1px solid #ccc;
+    border-radius:3px;
+    margin-bottom:10px;
+}
