@@ -18,10 +18,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getAllTasks() {
-        log.info("Fetching all tasks");
-        List<Task> tasks = taskRepository.findAll();
-        loadSubTasksForAll(tasks);
+    public List<Task> getAllTasks(String sortBy, boolean hideCompleted, Long userId) {
+        List<Task> tasks = taskRepository.findAllWithSorting(sortBy, userId);
+        if (hideCompleted) {
+            tasks.removeIf(task -> "done".equalsIgnoreCase(task.getStatus()));
+        }
         return tasks;
     }
 
@@ -38,46 +39,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTask(Integer id) {
-        log.info("Deleting task with id {}", id);
-        taskRepository.delete(id);
+    public void deleteTask(Integer id, Long userId) {
+        log.info("Deleting task with id {} for user {}", id, userId);
+        Optional<Task> task = taskRepository.findByIdAndUser(id, userId);
+        task.ifPresentOrElse(
+                t -> taskRepository.delete(id),
+                () -> log.warn("Task with id {} not found or access denied", id)
+        );
     }
 
     @Override
-    public Task getTaskById(Integer id) {
-        log.info("Fetching task with id {}", id);
-        Optional<Task> taskOptional = taskRepository.findById(id);
-        if (taskOptional.isPresent()) {
-            Task task = taskOptional.get();
-            task.setSubTasks(taskRepository.findSubTasksByParentId(id));
-            return task;
-        } else {
-            log.warn("Task with id {} not found", id);
-            throw new IllegalArgumentException("Task not found");
-        }
-    }
-
-    @Override
-    public List<Task> getAllTasks(String sortBy, boolean hideCompleted) {
-        log.info("Fetching tasks sorted by {} with hideCompleted={}", sortBy, hideCompleted);
-        List<Task> allTasks = taskRepository.findAllWithSorting(sortBy);
-        if (hideCompleted) {
-            allTasks.removeIf(t -> "done".equalsIgnoreCase(t.getStatus()));
-        }
-        loadSubTasksForAll(allTasks);
-        return allTasks;
-    }
-
-    @Override
-    public void attachFileToTask(Integer taskId, String filePath) {
-        log.info("Attaching file {} to task with id {}", filePath, taskId);
-        taskRepository.attachFileToTask(taskId, filePath);
-    }
-
-    private void loadSubTasksForAll(List<Task> tasks) {
-        for (Task t : tasks) {
-            List<Task> subs = taskRepository.findSubTasksByParentId(t.getId());
-            t.setSubTasks(subs);
-        }
+    public Task getTaskById(Integer id, Long userId) {
+        log.info("Fetching task with id {} for user {}", id, userId);
+        Optional<Task> task = taskRepository.findByIdAndUser(id, userId);
+        return task.orElseThrow(() -> new IllegalArgumentException("Task not found or access denied"));
     }
 }

@@ -16,12 +16,12 @@ public class Task {
     private Integer id;
     private String title;
     private String description;
-    private String priority;  // low, medium, high
+    private String priority;
     private Timestamp dueDate;
-    private String status;    // pending, done, overdue
+    private String status;
     private Integer categoryId;
     private Integer parentTaskId;
+    private String attachedFilePath;
+    private Long userId; // ID пользователя
     private List<Task> subTasks;
-    private String attachedFilePath; // Добавлено
 }
-

@@ -21,8 +21,10 @@ public class TaskDeleteServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String idParam = req.getParameter("id");
         if (idParam != null && !idParam.isBlank()) {
+            HttpSession session = req.getSession();
+            Long userId = (Long) session.getAttribute("userId");
             Integer id = Integer.valueOf(idParam);
-            taskService.deleteTask(id);
+            taskService.deleteTask(id, userId);
         }
         resp.sendRedirect("/dashboard");
     }

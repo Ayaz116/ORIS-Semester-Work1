@@ -22,9 +22,12 @@ public class EditorServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String idParam = req.getParameter("id");
+        HttpSession session = req.getSession();
+        Long userId = (Long) session.getAttribute("userId");
+
         if (idParam != null && !idParam.isBlank()) {
             Integer id = Integer.valueOf(idParam);
-            Task task = taskService.getTaskById(id);
+            Task task = taskService.getTaskById(id, userId);
             req.setAttribute("task", task);
         }
         req.getRequestDispatcher("/jsp/editor.jsp").forward(req, resp);
@@ -32,6 +35,14 @@ public class EditorServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId == null) {
+            resp.sendRedirect("/signIn");
+            return; // Если пользователь не авторизован
+        }
+
         String idParam = req.getParameter("id");
         String title = req.getParameter("title");
         String description = req.getParameter("description");
@@ -41,8 +52,6 @@ public class EditorServlet extends HttpServlet {
 
         Timestamp dueDate = null;
         if (dueDateStr != null && dueDateStr.contains("T")) {
-            // Формат datetime-local: YYYY-MM-DDTHH:MM
-            // Превращаем в YYYY-MM-DD HH:MM:00
             dueDateStr = dueDateStr.replace("T", " ") + ":00";
             dueDate = Timestamp.valueOf(dueDateStr);
         }
@@ -53,6 +62,7 @@ public class EditorServlet extends HttpServlet {
                 .priority(priority)
                 .dueDate(dueDate)
                 .status(status)
+                .userId(userId) // Привязываем задачу к текущему пользователю
                 .build();
 
         if (idParam != null && !idParam.isBlank()) {

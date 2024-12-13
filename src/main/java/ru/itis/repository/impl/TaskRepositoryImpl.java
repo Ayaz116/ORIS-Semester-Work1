@@ -27,6 +27,7 @@ public class TaskRepositoryImpl implements TaskRepository {
                     .categoryId((Integer) rs.getObject("category_id"))
                     .parentTaskId((Integer) rs.getObject("parent_task_id"))
                     .attachedFilePath(rs.getString("attached_file_path"))
+                    .userId(rs.getLong("user_id"))
                     .build();
         }
     };
@@ -38,6 +39,12 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
+    public List<Task> findAllByUser(Long userId) {
+        String sql = "SELECT * FROM tasks WHERE user_id = ?";
+        return jdbcTemplate.query(sql, taskRowMapper, userId);
+    }
+
+    @Override
     public Optional<Task> findById(Integer id) {
         String sql = "SELECT * FROM tasks WHERE id = ?";
         List<Task> tasks = jdbcTemplate.query(sql, taskRowMapper, id);
@@ -45,18 +52,25 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
+    public Optional<Task> findByIdAndUser(Integer id, Long userId) {
+        String sql = "SELECT * FROM tasks WHERE id = ? AND user_id = ?";
+        List<Task> tasks = jdbcTemplate.query(sql, taskRowMapper, id, userId);
+        return tasks.stream().findFirst();
+    }
+
+    @Override
     public void save(Task task) {
-        String sql = "INSERT INTO tasks(title, description, priority, due_date, status, category_id, parent_task_id, attached_file_path) " +
-                "VALUES(?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO tasks(title, description, priority, due_date, status, category_id, parent_task_id, attached_file_path, user_id) " +
+                "VALUES(?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, task.getTitle(), task.getDescription(), task.getPriority(), task.getDueDate(),
-                task.getStatus(), task.getCategoryId(), task.getParentTaskId(), task.getAttachedFilePath());
+                task.getStatus(), task.getCategoryId(), task.getParentTaskId(), task.getAttachedFilePath(), task.getUserId());
     }
 
     @Override
     public void update(Task task) {
-        String sql = "UPDATE tasks SET title=?, description=?, priority=?, due_date=?, status=?, category_id=?, parent_task_id=?, attached_file_path=? WHERE id=?";
+        String sql = "UPDATE tasks SET title=?, description=?, priority=?, due_date=?, status=?, category_id=?, parent_task_id=?, attached_file_path=?, user_id=? WHERE id=?";
         jdbcTemplate.update(sql, task.getTitle(), task.getDescription(), task.getPriority(), task.getDueDate(),
-                task.getStatus(), task.getCategoryId(), task.getParentTaskId(), task.getAttachedFilePath(), task.getId());
+                task.getStatus(), task.getCategoryId(), task.getParentTaskId(), task.getAttachedFilePath(), task.getUserId(), task.getId());
     }
 
     @Override
@@ -66,16 +80,15 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Task> findAllWithSorting(String sortBy) {
+    public List<Task> findAllWithSorting(String sortBy, Long userId) {
         String orderBy;
         switch (sortBy) {
             case "dueDate": orderBy = "due_date"; break;
             case "creationDate": orderBy = "id"; break;
-            default:
-                orderBy = "priority";
+            default: orderBy = "priority";
         }
-        String sql = "SELECT * FROM tasks ORDER BY " + orderBy;
-        return jdbcTemplate.query(sql, taskRowMapper);
+        String sql = "SELECT * FROM tasks WHERE user_id = ? ORDER BY " + orderBy;
+        return jdbcTemplate.query(sql, taskRowMapper, userId);
     }
 
     @Override

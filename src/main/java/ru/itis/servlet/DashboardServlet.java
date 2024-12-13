@@ -25,13 +25,18 @@ public class DashboardServlet extends HttpServlet {
         if (sort == null) sort = "priority";
 
         boolean hideCompleted = "on".equals(req.getParameter("hideCompleted"));
-        boolean notifications = "on".equals(req.getParameter("notificationsToggle"));
 
         HttpSession session = req.getSession();
-        session.setAttribute("notificationsEnabled", notifications);
+        Long userId = (Long) session.getAttribute("userId");
 
-        List<Task> tasks = taskService.getAllTasks(sort, hideCompleted);
+        if (userId == null) {
+            resp.sendRedirect("/signIn");
+            return; // Если пользователь не авторизован
+        }
+
+        List<Task> tasks = taskService.getAllTasks(sort, hideCompleted, userId);
         req.setAttribute("tasks", tasks);
         req.getRequestDispatcher("/jsp/dashboard.jsp").forward(req, resp);
     }
+
 }
