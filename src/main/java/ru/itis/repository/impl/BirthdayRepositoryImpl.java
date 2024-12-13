@@ -9,45 +9,33 @@ import ru.itis.repository.BirthdayRepository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 public class BirthdayRepositoryImpl implements BirthdayRepository {
 
     private final JdbcTemplate jdbcTemplate = ModuleConfiguration.jdbcTemplate();
 
-    private final RowMapper<Birthday> birthdayRowMapper = new RowMapper<>() {
-        @Override
-        public Birthday mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return Birthday.builder()
-                    .id(rs.getInt("id"))
-                    .name(rs.getString("name"))
-                    .birthDate(rs.getDate("birth_date"))
-                    .build();
-        }
-    };
+    private final RowMapper<Birthday> birthdayRowMapper = (rs, rowNum) -> Birthday.builder()
+            .id(rs.getLong("id"))
+            .name(rs.getString("name"))
+            .birthDate(rs.getDate("birth_date").toLocalDate())
+            .userId(rs.getLong("user_id"))
+            .build();
 
     @Override
-    public List<Birthday> findAll() {
-        String sql = "SELECT * FROM birthdays";
-        return jdbcTemplate.query(sql, birthdayRowMapper);
-    }
-
-    @Override
-    public Optional<Birthday> findById(Integer id) {
-        String sql = "SELECT * FROM birthdays WHERE id = ?";
-        List<Birthday> birthdays = jdbcTemplate.query(sql, birthdayRowMapper, id);
-        return birthdays.stream().findFirst();
+    public List<Birthday> findAllByUser(Long userId) {
+        String sql = "SELECT * FROM birthdays WHERE user_id = ?";
+        return jdbcTemplate.query(sql, birthdayRowMapper, userId);
     }
 
     @Override
     public void save(Birthday birthday) {
-        String sql = "INSERT INTO birthdays(name, birth_date) VALUES(?, ?)";
-        jdbcTemplate.update(sql, birthday.getName(), birthday.getBirthDate());
+        String sql = "INSERT INTO birthdays (name, birth_date, user_id) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, birthday.getName(), birthday.getBirthDate(), birthday.getUserId());
     }
 
     @Override
-    public void delete(Integer id) {
-        String sql = "DELETE FROM birthdays WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+    public void deleteByIdAndUser(Long id, Long userId) {
+        String sql = "DELETE FROM birthdays WHERE id = ? AND user_id = ?";
+        jdbcTemplate.update(sql, id, userId);
     }
 }

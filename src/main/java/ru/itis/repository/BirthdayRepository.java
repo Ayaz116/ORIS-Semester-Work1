@@ -3,11 +3,9 @@ package ru.itis.repository;
 import ru.itis.model.Birthday;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BirthdayRepository {
-    List<Birthday> findAll();
-    Optional<Birthday> findById(Integer id);
+    List<Birthday> findAllByUser(Long userId);
     void save(Birthday birthday);
-    void delete(Integer id);
+    void deleteByIdAndUser(Long id, Long userId);
 }

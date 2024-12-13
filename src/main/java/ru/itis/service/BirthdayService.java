@@ -5,7 +5,7 @@ import ru.itis.model.Birthday;
 import java.util.List;
 
 public interface BirthdayService {
-    List<Birthday> getAllBirthdays();
+    List<Birthday> getAllBirthdays(Long userId);
     void addBirthday(Birthday birthday);
-    void deleteBirthday(Integer id);
+    void deleteBirthday(Long id, Long userId);
 }

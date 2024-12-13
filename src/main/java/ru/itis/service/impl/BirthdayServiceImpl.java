@@ -17,9 +17,9 @@ public class BirthdayServiceImpl implements BirthdayService {
     }
 
     @Override
-    public List<Birthday> getAllBirthdays() {
-        log.info("Fetching all birthdays");
-        return birthdayRepository.findAll();
+    public List<Birthday> getAllBirthdays(Long userId) {
+        log.info("Fetching all birthdays for user with id {}", userId);
+        return birthdayRepository.findAllByUser(userId);
     }
 
     @Override
@@ -29,8 +29,8 @@ public class BirthdayServiceImpl implements BirthdayService {
     }
 
     @Override
-    public void deleteBirthday(Integer id) {
-        log.info("Deleting birthday with id {}", id);
-        birthdayRepository.delete(id);
+    public void deleteBirthday(Long id, Long userId) {
+        log.info("Deleting birthday with id {} for user {}", id, userId);
+        birthdayRepository.deleteByIdAndUser(id, userId);
     }
 }

@@ -22,6 +22,6 @@ public class Task {
     private Integer categoryId;
     private Integer parentTaskId;
     private String attachedFilePath;
-    private Long userId; // ID пользователя
+    private Long userId;
     private List<Task> subTasks;
 }
