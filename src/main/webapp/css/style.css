@@ -88,11 +88,11 @@ button:hover, input[type=submit]:hover, .button:hover {
 .task-card h3 {
     margin-top:0;
 }
+
 .actions {
-    position:absolute;
-    top:10px; right:10px;
-    display:flex;
-    gap:5px;
+    display: flex;
+    gap: 10px;
+    position: relative;
 }
 .edit-btn, .delete-btn {
     text-decoration:none;
@@ -127,4 +127,58 @@ input[type=text], input[type=email], input[type=password], input[type=datetime-l
     border:1px solid #ccc;
     border-radius:3px;
     margin-bottom:10px;
+}
+
+
+.birthday-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Расстояние между элементами */
+    margin: 20px 0;
+}
+
+.birthday-item {
+    display: flex;
+    justify-content: space-between; /* Расположение текста и кнопки */
+    align-items: center;
+    padding: 10px;
+    background: #faf8f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.birthday-item span {
+    font-size: 16px;
+    flex: 1; /* Расширяет текст на всю доступную ширину */
+    margin-right: 10px; /* Отступ от кнопки */
+}
+
+button, input[type=submit], .button {
+    background: #b5895c;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover, input[type=submit]:hover, .button:hover {
+    background: #9e7a4c;
+}
+
+.delete-btn {
+    background-color: #ff4d4d;
+    color: #fff;
+    padding: 5px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+    font-weight: bold;
+}
+
+.delete-btn:hover {
+    background-color: #e60000;
+    transform: scale(1.05); /* Небольшое увеличение кнопки при наведении */
 }
