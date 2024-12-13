@@ -12,4 +12,5 @@ public interface TaskRepository {
     void delete(Integer id);
     List<Task> findAllWithSorting(String sortBy);
     List<Task> findSubTasksByParentId(Integer parentId);
+    void attachFileToTask(Integer taskId, String filePath);
 }

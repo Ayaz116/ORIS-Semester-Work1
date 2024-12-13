@@ -49,7 +49,6 @@ public class TaskServiceImpl implements TaskService {
         Optional<Task> taskOptional = taskRepository.findById(id);
         if (taskOptional.isPresent()) {
             Task task = taskOptional.get();
-            // Загрузим подзадачи для этой задачи
             task.setSubTasks(taskRepository.findSubTasksByParentId(id));
             return task;
         } else {
@@ -60,12 +59,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getAllTasks(String sortBy, boolean hideCompleted) {
+        log.info("Fetching tasks sorted by {} with hideCompleted={}", sortBy, hideCompleted);
         List<Task> allTasks = taskRepository.findAllWithSorting(sortBy);
         if (hideCompleted) {
             allTasks.removeIf(t -> "done".equalsIgnoreCase(t.getStatus()));
         }
         loadSubTasksForAll(allTasks);
         return allTasks;
+    }
+
+    @Override
+    public void attachFileToTask(Integer taskId, String filePath) {
+        log.info("Attaching file {} to task with id {}", filePath, taskId);
+        taskRepository.attachFileToTask(taskId, filePath);
     }
 
     private void loadSubTasksForAll(List<Task> tasks) {

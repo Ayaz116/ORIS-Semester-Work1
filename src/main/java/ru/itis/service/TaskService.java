@@ -10,4 +10,5 @@ public interface TaskService {
     void deleteTask(Integer id);
     Task getTaskById(Integer id);
     List<Task> getAllTasks(String sortBy, boolean hideCompleted);
+    void attachFileToTask(Integer taskId, String filePath);
 }

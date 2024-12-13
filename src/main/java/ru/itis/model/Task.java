@@ -13,14 +13,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
-    private Integer id; // Было Long
+    private Integer id;
     private String title;
     private String description;
     private String priority;  // low, medium, high
     private Timestamp dueDate;
-    private String status;    // pending, done, archived, overdue
-    private Integer categoryId; // Было Long
-    private Integer parentTaskId; // Было Long
+    private String status;    // pending, done, overdue
+    private Integer categoryId;
+    private Integer parentTaskId;
     private List<Task> subTasks;
+    private String attachedFilePath; // Добавлено
 }
 

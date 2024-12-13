@@ -18,18 +18,18 @@ public class TaskRepositoryImpl implements TaskRepository {
         @Override
         public Task mapRow(ResultSet rs, int rowNum) throws SQLException {
             return Task.builder()
-                    .id(rs.getInt("id")) // Было rs.getLong
+                    .id(rs.getInt("id"))
                     .title(rs.getString("title"))
                     .description(rs.getString("description"))
                     .priority(rs.getString("priority"))
                     .dueDate(rs.getTimestamp("due_date"))
                     .status(rs.getString("status"))
-                    .categoryId((Integer) rs.getObject("category_id")) // Было Long
-                    .parentTaskId((Integer) rs.getObject("parent_task_id")) // Было Long
+                    .categoryId((Integer) rs.getObject("category_id"))
+                    .parentTaskId((Integer) rs.getObject("parent_task_id"))
+                    .attachedFilePath(rs.getString("attached_file_path"))
                     .build();
         }
     };
-
 
     @Override
     public List<Task> findAll() {
@@ -46,21 +46,21 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void save(Task task) {
-        String sql = "INSERT INTO tasks(title, description, priority, due_date, status, category_id, parent_task_id) " +
-                "VALUES(?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO tasks(title, description, priority, due_date, status, category_id, parent_task_id, attached_file_path) " +
+                "VALUES(?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, task.getTitle(), task.getDescription(), task.getPriority(), task.getDueDate(),
-                task.getStatus(), task.getCategoryId(), task.getParentTaskId());
+                task.getStatus(), task.getCategoryId(), task.getParentTaskId(), task.getAttachedFilePath());
     }
 
     @Override
     public void update(Task task) {
-        String sql = "UPDATE tasks SET title=?, description=?, priority=?, due_date=?, status=?, category_id=?, parent_task_id=? WHERE id=?";
+        String sql = "UPDATE tasks SET title=?, description=?, priority=?, due_date=?, status=?, category_id=?, parent_task_id=?, attached_file_path=? WHERE id=?";
         jdbcTemplate.update(sql, task.getTitle(), task.getDescription(), task.getPriority(), task.getDueDate(),
-                task.getStatus(), task.getCategoryId(), task.getParentTaskId(), task.getId());
+                task.getStatus(), task.getCategoryId(), task.getParentTaskId(), task.getAttachedFilePath(), task.getId());
     }
 
     @Override
-    public void delete(Integer id) { // Было Long
+    public void delete(Integer id) {
         String sql = "DELETE FROM tasks WHERE id=?";
         jdbcTemplate.update(sql, id);
     }
@@ -82,5 +82,11 @@ public class TaskRepositoryImpl implements TaskRepository {
     public List<Task> findSubTasksByParentId(Integer parentId) {
         String sql = "SELECT * FROM tasks WHERE parent_task_id = ?";
         return jdbcTemplate.query(sql, taskRowMapper, parentId);
+    }
+
+    @Override
+    public void attachFileToTask(Integer taskId, String filePath) {
+        String sql = "UPDATE tasks SET attached_file_path=? WHERE id=?";
+        jdbcTemplate.update(sql, filePath, taskId);
     }
 }

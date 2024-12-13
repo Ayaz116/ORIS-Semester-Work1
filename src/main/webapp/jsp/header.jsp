@@ -15,7 +15,7 @@
             <span>Привет, ${userName}!</span>
             <a href="/logout">Выйти</a>
             <a href="/dashboard">Задачи</a>
-            <a href="/people">Люди</a>
+            <a href="/birthdays">Люди</a>
         </c:if>
         <c:if test="${empty userName}">
             <a href="/signIn">Войти</a>
