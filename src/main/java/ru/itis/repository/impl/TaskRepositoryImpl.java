@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.RowMapper;
 import ru.itis.config.ModuleConfiguration;
 import ru.itis.model.Task;
 import ru.itis.repository.TaskRepository;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -24,9 +23,6 @@ public class TaskRepositoryImpl implements TaskRepository {
                     .priority(rs.getString("priority"))
                     .dueDate(rs.getTimestamp("due_date"))
                     .status(rs.getString("status"))
-                    .categoryId((Integer) rs.getObject("category_id"))
-                    .parentTaskId((Integer) rs.getObject("parent_task_id"))
-                    .attachedFilePath(rs.getString("attached_file_path"))
                     .userId(rs.getLong("user_id"))
                     .build();
         }
@@ -60,17 +56,17 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void save(Task task) {
-        String sql = "INSERT INTO tasks(title, description, priority, due_date, status, category_id, parent_task_id, attached_file_path, user_id) " +
-                "VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO tasks(title, description, priority, due_date, status, user_id) " +
+                "VALUES(?,?,?,?,?,?)";
         jdbcTemplate.update(sql, task.getTitle(), task.getDescription(), task.getPriority(), task.getDueDate(),
-                task.getStatus(), task.getCategoryId(), task.getParentTaskId(), task.getAttachedFilePath(), task.getUserId());
+                task.getStatus(), task.getUserId());
     }
 
     @Override
     public void update(Task task) {
-        String sql = "UPDATE tasks SET title=?, description=?, priority=?, due_date=?, status=?, category_id=?, parent_task_id=?, attached_file_path=?, user_id=? WHERE id=?";
+        String sql = "UPDATE tasks SET title=?, description=?, priority=?, due_date=?, status=?, user_id=? WHERE id=?";
         jdbcTemplate.update(sql, task.getTitle(), task.getDescription(), task.getPriority(), task.getDueDate(),
-                task.getStatus(), task.getCategoryId(), task.getParentTaskId(), task.getAttachedFilePath(), task.getUserId(), task.getId());
+                task.getStatus(), task.getUserId(), task.getId());
     }
 
     @Override
@@ -104,15 +100,5 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
 
-    @Override
-    public List<Task> findSubTasksByParentId(Integer parentId) {
-        String sql = "SELECT * FROM tasks WHERE parent_task_id = ?";
-        return jdbcTemplate.query(sql, taskRowMapper, parentId);
-    }
 
-    @Override
-    public void attachFileToTask(Integer taskId, String filePath) {
-        String sql = "UPDATE tasks SET attached_file_path=? WHERE id=?";
-        jdbcTemplate.update(sql, filePath, taskId);
-    }
 }

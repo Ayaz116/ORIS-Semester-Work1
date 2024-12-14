@@ -32,6 +32,7 @@ public class SignInServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         SignInRequest signInRequest = SignInRequest.builder()
                 .email(req.getParameter("email"))
                 .password(req.getParameter("password"))
@@ -39,20 +40,21 @@ public class SignInServlet extends HttpServlet {
 
         AuthResponse authResponse = userService.signIn(signInRequest);
         if (authResponse.getStatus() == 0) {
-            // Успешный вход
+
             HttpSession session = req.getSession(true);
             session.setAttribute(AuthFilter.AUTHORIZATION, true);
             session.setAttribute("userId", authResponse.getUser().getId());
             session.setAttribute("userName", authResponse.getUser().getNickname());
             resp.sendRedirect("/dashboard");
         } else if (authResponse.getStatus() == 50) {
-            // Техническая ошибка
+
             resp.sendRedirect("/error?err=" + authResponse.getStatusDesc());
         } else {
-            // Пользовательская ошибка (всегда показываем "Неверные данные")
+
             req.setAttribute("errorMessage", "Неверные данные");
             req.getRequestDispatcher("jsp/signIn.jsp").forward(req, resp);
         }
+
     }
 
 }

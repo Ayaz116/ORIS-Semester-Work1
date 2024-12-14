@@ -5,11 +5,6 @@ import org.springframework.jdbc.core.RowMapper;
 import ru.itis.config.ModuleConfiguration;
 import ru.itis.model.Birthday;
 import ru.itis.repository.BirthdayRepository;
-
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 public class BirthdayRepositoryImpl implements BirthdayRepository {

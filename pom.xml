@@ -74,12 +74,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Flyway for database migrations -->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>9.22.1</version>
-        </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -96,19 +90,7 @@
                 <version>3.3.1</version>
             </plugin>
 
-            <!-- Flyway Maven Plugin -->
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>9.22.1</version>
-                <configuration>
-                    <!-- Конфигурация подключения к базе -->
-                    <url>jdbc:postgresql://localhost:5432/myprojectdb</url>
-                    <user>postgres</user>
-                    <password>ваш_пароль</password>
-                    <schemas>public</schemas>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
 </project>

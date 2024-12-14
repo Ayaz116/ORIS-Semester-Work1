@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -17,11 +16,6 @@
                 <a href="/dashboard">Задачи</a>
                 <a href="/birthdays">Дни рождения</a>
             </c:if>
-            <c:if test="${empty userName}">
-                <a href="/signIn">Войти</a>
-                <a href="/signUp">Регистрация</a>
-            </c:if>
         </nav>
     </header>
     <main class="main-container">
-

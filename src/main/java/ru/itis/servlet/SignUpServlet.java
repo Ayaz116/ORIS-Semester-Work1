@@ -24,13 +24,22 @@ public class SignUpServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Убираем атрибут errorMessage при обновлении страницы
-        req.setAttribute("errorMessage", null);
-        req.getRequestDispatcher("jsp/signUp.jsp").forward(req, resp);
+        try {
+            req.setAttribute("errorMessage", null);
+            req.getRequestDispatcher("jsp/signUp.jsp").forward(req, resp);
+        } catch (Exception e) {
+            if (e.getMessage().contains("Failed to obtain JDBC Connection")) {
+                resp.sendRedirect("/error?err=Database Connection Failed");
+            } else {
+                resp.sendRedirect("/error?err=Database Error: " + e.getMessage());
+            }
+        }
+
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         SignUpRequest signUpRequest = SignUpRequest.builder()
                 .email(req.getParameter("email"))
                 .nickname(req.getParameter("nickname"))
@@ -39,16 +48,14 @@ public class SignUpServlet extends HttpServlet {
 
         AuthResponse authResponse = userService.signUp(signUpRequest);
         if (authResponse.getStatus() == 0) {
-            // Успешная регистрация
             resp.sendRedirect("/signIn");
         } else if (authResponse.getStatus() == 50) {
-            // Техническая ошибка
             resp.sendRedirect("/error?err=" + authResponse.getStatusDesc());
         } else {
-            // Пользовательская ошибка (всегда показываем "Неверные данные")
             req.setAttribute("errorMessage", "Неверные данные");
             req.getRequestDispatcher("jsp/signUp.jsp").forward(req, resp);
         }
+
     }
 
 

@@ -21,29 +21,33 @@ public class EditorServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String idParam = req.getParameter("id");
-        HttpSession session = req.getSession();
-        Long userId = (Long) session.getAttribute("userId");
+        try {
+            HttpSession session = req.getSession();
+            Long userId = (Long) session.getAttribute("userId");
 
-        if (idParam != null && !idParam.isBlank()) {
-            Integer id = Integer.valueOf(idParam);
-            Task task = taskService.getTaskById(id, userId);
-            req.setAttribute("task", task);
+            String idParam = req.getParameter("id");
+
+            if (idParam != null && !idParam.isBlank()) {
+                Integer id = Integer.valueOf(idParam);
+                Task task = taskService.getTaskById(id, userId);
+                req.setAttribute("task", task);
+            }
+            req.getRequestDispatcher("/jsp/editor.jsp").forward(req, resp);
+        } catch (Exception e) {
+            resp.sendRedirect("/error?err=" + e.getMessage());
         }
-        req.getRequestDispatcher("/jsp/editor.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html;charset=UTF-8");
         HttpSession session = req.getSession();
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId == null) {
             resp.sendRedirect("/signIn");
-            return; // Если пользователь не авторизован
+            return;
         }
 
         String idParam = req.getParameter("id");
@@ -65,7 +69,7 @@ public class EditorServlet extends HttpServlet {
                 .priority(priority)
                 .dueDate(dueDate)
                 .status(status)
-                .userId(userId) // Привязываем задачу к текущему пользователю
+                .userId(userId)
                 .build();
 
         if (idParam != null && !idParam.isBlank()) {
@@ -75,5 +79,6 @@ public class EditorServlet extends HttpServlet {
             taskService.createTask(task);
         }
         resp.sendRedirect("/dashboard");
+
     }
 }

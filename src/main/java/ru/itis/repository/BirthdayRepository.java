@@ -2,7 +2,6 @@ package ru.itis.repository;
 
 import ru.itis.model.Birthday;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface BirthdayRepository {

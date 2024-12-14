@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,24 +23,33 @@ public class BirthdaysServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
-        Long userId = (Long) session.getAttribute("userId");
+        try {
+            HttpSession session = req.getSession(false);
+            Long userId = (Long) session.getAttribute("userId");
 
-        if (userId == null) {
-            resp.sendRedirect("/signIn");
-            return;
+            if (userId == null) {
+                resp.sendRedirect("/signIn");
+                return;
+            }
+
+            List<Birthday> birthdays = birthdayService.getAllBirthdays(userId);
+            req.setAttribute("birthdays", birthdays);
+            req.getRequestDispatcher("/jsp/birthdays.jsp").forward(req, resp);
+
+
+        } catch (Exception e) {
+            if (e.getMessage().contains("Failed to obtain JDBC Connection")) {
+                resp.sendRedirect("/error?err=Database Connection Failed");
+            } else {
+                resp.sendRedirect("/error?err=Database Error: " + e.getMessage());
+            }
         }
-
-        List<Birthday> birthdays = birthdayService.getAllBirthdays(userId);
-        req.setAttribute("birthdays", birthdays);
-        req.getRequestDispatcher("/jsp/birthdays.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html;charset=UTF-8");
         HttpSession session = req.getSession(false);
         Long userId = (Long) session.getAttribute("userId");
 
@@ -59,20 +69,6 @@ public class BirthdaysServlet extends HttpServlet {
 
         birthdayService.addBirthday(birthday);
         resp.sendRedirect("/birthdays");
-    }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
-        Long userId = (Long) session.getAttribute("userId");
-
-        if (userId == null) {
-            resp.sendRedirect("/signIn");
-            return;
-        }
-
-        Long id = Long.valueOf(req.getParameter("id"));
-        birthdayService.deleteBirthday(id, userId);
-        resp.setStatus(HttpServletResponse.SC_OK);
     }
 }

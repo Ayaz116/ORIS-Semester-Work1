@@ -46,30 +46,25 @@ public class BirthdayServiceImpl implements BirthdayService {
         LocalDate today = LocalDate.now();
         return allBirthdays.stream()
                 .map(birthday -> {
-                    // Получение текущего года для обработки
                     LocalDate nextBirthday = birthday.getBirthDate()
                             .withYear(today.getYear());
 
-                    // Если день рождения уже прошёл в этом году
                     if (nextBirthday.isBefore(today) || nextBirthday.isEqual(today)) {
                         nextBirthday = nextBirthday.plusYears(1);
                     }
 
-                    // Расчёт дней до ближайшего дня рождения
                     long daysToBirthday = ChronoUnit.DAYS.between(today, nextBirthday);
 
-                    // Расчёт возраста на следующий день рождения
                     int upcomingAge = nextBirthday.getYear() - birthday.getBirthDate().getYear();
 
-                    // Устанавливаем вычисленные значения
                     birthday.setDaysToBirthday((int) daysToBirthday);
                     birthday.setUpcomingAge(upcomingAge);
 
                     return birthday;
                 })
-                // Фильтруем только дни рождения в ближайшую неделю
+
                 .filter(birthday -> birthday.getDaysToBirthday() <= 7)
-                // Сортируем по количеству дней до дня рождения
+
                 .sorted(Comparator.comparingInt(Birthday::getDaysToBirthday))
                 .collect(Collectors.toList());
     }

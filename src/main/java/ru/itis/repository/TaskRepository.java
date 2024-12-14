@@ -13,6 +13,6 @@ public interface TaskRepository {
     void save(Task task);
     void update(Task task);
     void delete(Integer id);
-    List<Task> findSubTasksByParentId(Integer parentId);
-    void attachFileToTask(Integer taskId, String filePath);
+
+
 }

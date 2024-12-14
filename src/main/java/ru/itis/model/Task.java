@@ -19,9 +19,5 @@ public class Task {
     private String priority;
     private Timestamp dueDate;
     private String status;
-    private Integer categoryId;
-    private Integer parentTaskId;
-    private String attachedFilePath;
     private Long userId;
-    private List<Task> subTasks;
 }

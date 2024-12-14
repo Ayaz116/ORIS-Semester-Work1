@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/dashboard")
@@ -25,29 +26,27 @@ public class DashboardServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String sort = req.getParameter("sort");
-        if (sort == null) sort = "priority";
-
-        boolean hideCompleted = "on".equals(req.getParameter("hideCompleted"));
 
         HttpSession session = req.getSession();
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId == null) {
             resp.sendRedirect("/signIn");
-            return; // Если пользователь не авторизован
+            return;
         }
 
-        // Получение задач
-        List<Task> tasks = taskService.getAllTasks(sort, hideCompleted, userId);
+        String sort = req.getParameter("sort");
+        if (sort == null) sort = "priority";
 
-        // Получение ближайших дней рождения
+        boolean hideCompleted = "on".equals(req.getParameter("hideCompleted"));
+
+        List<Task> tasks = taskService.getAllTasks(sort, hideCompleted, userId);
         List<Birthday> upcomingBirthdays = birthdayService.getUpcomingBirthdays(userId);
 
-        // Установка атрибутов для отображения
         req.setAttribute("tasks", tasks);
         req.setAttribute("upcomingBirthdays", upcomingBirthdays);
-
         req.getRequestDispatcher("/jsp/dashboard.jsp").forward(req, resp);
+
+
     }
 }

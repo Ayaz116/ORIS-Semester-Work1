@@ -12,7 +12,7 @@ import java.util.List;
 @WebFilter("/*")
 public class AuthFilter implements Filter {
 
-    private static final List<String> PROTECTED_URIS = List.of("/logout", "/dashboard", "/editor", "/contacts", "/people");
+    private static final List<String> PROTECTED_URIS = List.of("/logout", "/dashboard", "/editor", "/birthdays");
     private static final List<String> AUTH_PAGES = List.of("/signIn", "/signUp");
 
     public static final String AUTHORIZATION = "authorization";
@@ -28,7 +28,6 @@ public class AuthFilter implements Filter {
         boolean userAuth = isUserAuth(request);
 
         if (userAuth && isAuthPage(uri)) {
-            // Авторизован и пытается зайти на страницу входа/регистрации – деавторизируем
             HttpSession session = request.getSession(false);
             if (session != null) {
                 session.removeAttribute(AUTHORIZATION);
@@ -40,7 +39,6 @@ public class AuthFilter implements Filter {
         }
 
         if (!userAuth && isProtectedUri(uri)) {
-            // Не авторизован, но пытается попасть на защищённую страницу
             response.sendRedirect("/signIn");
             return;
         }
