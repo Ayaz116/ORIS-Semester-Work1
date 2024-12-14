@@ -41,11 +41,12 @@ public class BirthdayRepositoryImpl implements BirthdayRepository {
         jdbcTemplate.update(sql, id, userId);
     }
 
-    @Override
-    public List<Birthday> findBirthdaysBetweenDates(LocalDate startDate, LocalDate endDate, Long userId) {
-        String sql = "SELECT * FROM birthdays WHERE user_id = ? " +
-                "AND birth_date >= ? AND birth_date <= ? ORDER BY birth_date";
-        return jdbcTemplate.query(sql, birthdayRowMapper, userId, Date.valueOf(startDate), Date.valueOf(endDate));
-    }
+
+
+
+
+
+
+
 
 }

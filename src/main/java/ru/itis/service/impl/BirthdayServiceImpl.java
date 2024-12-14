@@ -6,7 +6,11 @@ import ru.itis.repository.BirthdayRepository;
 import ru.itis.service.BirthdayService;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class BirthdayServiceImpl implements BirthdayService {
@@ -37,8 +41,39 @@ public class BirthdayServiceImpl implements BirthdayService {
 
     @Override
     public List<Birthday> getUpcomingBirthdays(Long userId) {
-        LocalDate now = LocalDate.now();
-        LocalDate nextWeek = now.plusDays(7);
-        return birthdayRepository.findBirthdaysBetweenDates(now, nextWeek, userId);
+        List<Birthday> allBirthdays = birthdayRepository.findAllByUser(userId);
+
+        LocalDate today = LocalDate.now();
+        return allBirthdays.stream()
+                .map(birthday -> {
+                    // Получение текущего года для обработки
+                    LocalDate nextBirthday = birthday.getBirthDate()
+                            .withYear(today.getYear());
+
+                    // Если день рождения уже прошёл в этом году
+                    if (nextBirthday.isBefore(today) || nextBirthday.isEqual(today)) {
+                        nextBirthday = nextBirthday.plusYears(1);
+                    }
+
+                    // Расчёт дней до ближайшего дня рождения
+                    long daysToBirthday = ChronoUnit.DAYS.between(today, nextBirthday);
+
+                    // Расчёт возраста на следующий день рождения
+                    int upcomingAge = nextBirthday.getYear() - birthday.getBirthDate().getYear();
+
+                    // Устанавливаем вычисленные значения
+                    birthday.setDaysToBirthday((int) daysToBirthday);
+                    birthday.setUpcomingAge(upcomingAge);
+
+                    return birthday;
+                })
+                // Фильтруем только дни рождения в ближайшую неделю
+                .filter(birthday -> birthday.getDaysToBirthday() <= 7)
+                // Сортируем по количеству дней до дня рождения
+                .sorted(Comparator.comparingInt(Birthday::getDaysToBirthday))
+                .collect(Collectors.toList());
     }
+
+
+
 }

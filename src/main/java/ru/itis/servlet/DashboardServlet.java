@@ -1,6 +1,8 @@
 package ru.itis.servlet;
 
+import ru.itis.model.Birthday;
 import ru.itis.model.Task;
+import ru.itis.service.BirthdayService;
 import ru.itis.service.TaskService;
 
 import javax.servlet.ServletException;
@@ -13,10 +15,12 @@ import java.util.List;
 public class DashboardServlet extends HttpServlet {
 
     private TaskService taskService;
+    private BirthdayService birthdayService;
 
     @Override
     public void init() throws ServletException {
         taskService = (TaskService) getServletContext().getAttribute("taskService");
+        birthdayService = (BirthdayService) getServletContext().getAttribute("birthdayService");
     }
 
     @Override
@@ -34,9 +38,16 @@ public class DashboardServlet extends HttpServlet {
             return; // Если пользователь не авторизован
         }
 
+        // Получение задач
         List<Task> tasks = taskService.getAllTasks(sort, hideCompleted, userId);
+
+        // Получение ближайших дней рождения
+        List<Birthday> upcomingBirthdays = birthdayService.getUpcomingBirthdays(userId);
+
+        // Установка атрибутов для отображения
         req.setAttribute("tasks", tasks);
+        req.setAttribute("upcomingBirthdays", upcomingBirthdays);
+
         req.getRequestDispatcher("/jsp/dashboard.jsp").forward(req, resp);
     }
-
 }

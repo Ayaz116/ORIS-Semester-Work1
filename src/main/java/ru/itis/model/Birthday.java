@@ -1,10 +1,7 @@
 package ru.itis.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -12,9 +9,13 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Birthday {
     private Long id;
     private String name;
     private LocalDate birthDate;
     private Long userId;
+    private int daysToBirthday;
+    private int upcomingAge;
 }
