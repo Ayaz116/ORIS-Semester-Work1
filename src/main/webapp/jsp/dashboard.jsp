@@ -17,7 +17,7 @@
             </select>
         </label>
         <label>
-            <input type="checkbox" name="hideCompleted" ${param.hideCompleted == 'on' ? 'checked' : ''}> Скрыть выполненные
+            <input type="checkbox" name="hideCompleted" ${param.hideCompleted == 'on' ? 'checked' : ''}> Скрыть завершенные
         </label>
         <label>
             <input type="checkbox" name="notificationsToggle" ${param.notificationsToggle == 'on' ? 'checked' : ''}> Уведомления о задачах
@@ -30,7 +30,7 @@
 <div class="task-grid">
     <c:forEach var="task" items="${tasks}">
         <!-- Проверяем, не скрываем ли выполненные -->
-        <c:if test="${!(param.hideCompleted == 'on' and task.status == 'done')}">
+        <c:if test="${!(param.hideCompleted == 'on' and task.status == 'Завершено')}">
             <div class="task-card ${task.status}">
                 <h3>${task.title}</h3>
                 <p>${task.description}</p>

@@ -11,18 +11,17 @@
     <label>Описание: <textarea name="description">${task.description}</textarea></label><br>
     <label>Приоритет:
         <select name="priority">
-            <option value="low" ${task.priority == "low" ? "selected" : ""}>Низкий</option>
-            <option value="medium" ${task.priority == "medium" ? "selected" : ""}>Средний</option>
-            <option value="high" ${task.priority == "high" ? "selected" : ""}>Высокий</option>
+            <option value="Низкий" ${task.priority == "Низкий" ? "selected" : ""}>Низкий</option>
+            <option value="Средний" ${task.priority == "Средний" ? "selected" : ""}>Средний</option>
+            <option value="Высокий" ${task.priority == "Высокий" ? "selected" : ""}>Высокий</option>
         </select>
     </label><br>
     <label>Срок выполнения: <input type="datetime-local" name="due_date" value="${task.dueDate}"></label><br>
     <label>Статус:
         <select name="status">
-            <option value="pending" ${task.status == "pending" ? "selected" : ""}>Ожидает</option>
-            <option value="done" ${task.status == "done" ? "selected" : ""}>Выполнено</option>
-            <option value="archived" ${task.status == "archived" ? "selected" : ""}>В архиве</option>
-            <option value="overdue" ${task.status == "overdue" ? "selected" : ""}>Просрочено</option>
+            <option value="Выполняется" ${task.status == "Выполняется" ? "selected" : ""}>Выполняется</option>
+            <option value="Завершено" ${task.status == "Завершено" ? "selected" : ""}>Завершено</option>
+            <option value="Просрочено" ${task.status == "Просрочено" ? "selected" : ""}>Просрочено</option>
         </select>
     </label><br>
     <input type="submit" value="Сохранить">

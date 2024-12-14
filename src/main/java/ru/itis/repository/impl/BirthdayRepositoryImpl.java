@@ -6,8 +6,10 @@ import ru.itis.config.ModuleConfiguration;
 import ru.itis.model.Birthday;
 import ru.itis.repository.BirthdayRepository;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class BirthdayRepositoryImpl implements BirthdayRepository {
@@ -38,4 +40,12 @@ public class BirthdayRepositoryImpl implements BirthdayRepository {
         String sql = "DELETE FROM birthdays WHERE id = ? AND user_id = ?";
         jdbcTemplate.update(sql, id, userId);
     }
+
+    @Override
+    public List<Birthday> findBirthdaysBetweenDates(LocalDate startDate, LocalDate endDate, Long userId) {
+        String sql = "SELECT * FROM birthdays WHERE user_id = ? " +
+                "AND birth_date >= ? AND birth_date <= ? ORDER BY birth_date";
+        return jdbcTemplate.query(sql, birthdayRowMapper, userId, Date.valueOf(startDate), Date.valueOf(endDate));
+    }
+
 }

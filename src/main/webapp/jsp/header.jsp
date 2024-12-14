@@ -6,21 +6,22 @@
     <meta charset="UTF-8">
     <title><c:out value="${pageTitle}" /></title>
     <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/form-validation.js"></script>
 </head>
 <body>
-<header>
-    <nav class="top-nav">
-        <c:if test="${not empty userName}">
-            <span>Привет, ${userName}!</span>
-            <a href="/logout">Выйти</a>
-            <a href="/dashboard">Задачи</a>
-            <a href="/birthdays">Люди</a>
-        </c:if>
-        <c:if test="${empty userName}">
-            <a href="/signIn">Войти</a>
-            <a href="/signUp">Регистрация</a>
-        </c:if>
-    </nav>
-</header>
-<main class="main-container">
+<div class="wrapper">
+    <header class="top-header">
+        <nav class="top-nav">
+            <c:if test="${not empty userName}">
+                <span class="welcome-message">Добро пожаловать, <b>${userName}</b>!</span>
+                <a href="/logout">Выйти</a>
+                <a href="/dashboard">Задачи</a>
+                <a href="/birthdays">Дни рождения</a>
+            </c:if>
+            <c:if test="${empty userName}">
+                <a href="/signIn">Войти</a>
+                <a href="/signUp">Регистрация</a>
+            </c:if>
+        </nav>
+    </header>
+    <main class="main-container">
+

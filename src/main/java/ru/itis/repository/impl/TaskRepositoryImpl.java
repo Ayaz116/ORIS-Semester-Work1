@@ -81,15 +81,28 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public List<Task> findAllWithSorting(String sortBy, Long userId) {
-        String orderBy;
+        String sql;
         switch (sortBy) {
-            case "dueDate": orderBy = "due_date"; break;
-            case "creationDate": orderBy = "id"; break;
-            default: orderBy = "priority";
+            case "dueDate":
+                sql = "SELECT * FROM tasks WHERE user_id = ? ORDER BY due_date";
+                break;
+            case "creationDate":
+                sql = "SELECT * FROM tasks WHERE user_id = ? ORDER BY id";
+                break;
+            case "priority":
+            default:
+                sql = "SELECT * FROM tasks WHERE user_id = ? " +
+                        "ORDER BY CASE " +
+                        "WHEN priority = 'Высокий' THEN 1 " +
+                        "WHEN priority = 'Средний' THEN 2 " +
+                        "WHEN priority = 'Низкий' THEN 3 " +
+                        "ELSE 4 END";
+                break;
         }
-        String sql = "SELECT * FROM tasks WHERE user_id = ? ORDER BY " + orderBy;
+
         return jdbcTemplate.query(sql, taskRowMapper, userId);
     }
+
 
     @Override
     public List<Task> findSubTasksByParentId(Integer parentId) {

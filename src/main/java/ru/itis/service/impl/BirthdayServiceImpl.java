@@ -5,6 +5,7 @@ import ru.itis.model.Birthday;
 import ru.itis.repository.BirthdayRepository;
 import ru.itis.service.BirthdayService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -32,5 +33,12 @@ public class BirthdayServiceImpl implements BirthdayService {
     public void deleteBirthday(Long id, Long userId) {
         log.info("Deleting birthday with id {} for user {}", id, userId);
         birthdayRepository.deleteByIdAndUser(id, userId);
+    }
+
+    @Override
+    public List<Birthday> getUpcomingBirthdays(Long userId) {
+        LocalDate now = LocalDate.now();
+        LocalDate nextWeek = now.plusDays(7);
+        return birthdayRepository.findBirthdaysBetweenDates(now, nextWeek, userId);
     }
 }
