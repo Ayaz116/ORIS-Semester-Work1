@@ -76,7 +76,7 @@
     <%= request.getAttribute("errorMessage") %>
   </div>
   <% } %>
-  <form action="/signIn" method="post">
+  <form id="signInForm" action="/signIn" method="post">
     <label for="email">Email:</label>
     <input id="email" name="email" type="email" placeholder="email@main.ru" required/>
 

@@ -1,35 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Ошибка</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #ffefef;
-            color: #b71c1c;
-        }
-        .error-container {
-            margin-top: 20%;
-        }
-        .error-container h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-        .error-container p {
-            font-size: 1.5em;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-<div class="error-container">
-    <h1>Ooops, что-то пошло не так...</h1>
-    <p><c:out value="${param.err}" /></p>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="pageTitle" value="Ошибка" scope="request"/>
+<jsp:include page="header.jsp"/>
+
+<div class="page-container">
+    <div class="section" style="text-align: center;">
+        <h1>Ooops, что-то пошло не так...</h1>
+        <p style="font-size:1.2em; margin-top:20px;"><c:out value="${param.err}" /></p>
+    </div>
+</div>
+
+<jsp:include page="footer.jsp"/>
+</main>
 </div>
 </body>
 </html>

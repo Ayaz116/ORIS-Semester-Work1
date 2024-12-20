@@ -79,7 +79,7 @@
         <%= request.getAttribute("errorMessage") %>
     </div>
     <% } %>
-    <form action="/signUp" method="post">
+    <form id="signUpForm" action="/signUp" method="post">
         <label for="email">Email:</label>
         <input id="email" name="email" type="email" placeholder="email@main.ru" required/>
 
