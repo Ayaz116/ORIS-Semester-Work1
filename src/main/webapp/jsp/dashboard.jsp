@@ -8,6 +8,13 @@
 <div class="dashboard-container">
     <div class="task-section">
         <h1>Ваши задачи</h1>
+
+        <c:if test="${not empty requestScope.dashboardMessage}">
+            <p style="font-style:italic; margin-bottom:15px; color:#eee;">
+                    ${requestScope.dashboardMessage}
+            </p>
+        </c:if>
+
         <div class="toolbar">
             <label>Сортировать по:
                 <select name="sort" id="sortSelect">
@@ -19,7 +26,7 @@
             <label style="margin-left: 15px;">
                 <input type="checkbox" name="hideCompleted" id="hideCompletedCheckbox" ${param.hideCompleted == 'on' ? 'checked' : ''}> Скрыть завершенные
             </label>
-            <a href="/editor" class="button" style="margin-left:auto;">Создать задачу</a>
+            <a href="${pageContext.request.contextPath}/editor" class="button" style="margin-left:auto;">Создать задачу</a>
         </div>
         <div class="task-grid" id="taskGrid">
             <c:forEach var="task" items="${tasks}">
@@ -45,8 +52,8 @@
                     </p>
                     <p>Статус: ${task.status}</p>
                     <div class="actions">
-                        <a href="/editor?id=${task.id}" class="edit-btn">✏️ Редактировать</a>
-                        <a href="/taskDelete?id=${task.id}" class="delete-btn">🗑️ Удалить</a>
+                        <a href="${pageContext.request.contextPath}/editor?id=${task.id}" class="edit-btn">✏️ Редактировать</a>
+                        <a href="${pageContext.request.contextPath}/taskDelete?id=${task.id}" class="delete-btn">🗑️ Удалить</a>
                     </div>
                 </div>
             </c:forEach>
@@ -65,5 +72,4 @@
 </div>
 
 <jsp:include page="footer.jsp" />
-
-<script src="/js/dashboard.js"></script>
+<script src="${pageContext.request.contextPath}/js/dashboard.js"></script>

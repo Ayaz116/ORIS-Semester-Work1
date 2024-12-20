@@ -6,7 +6,7 @@
 <div class="page-container">
     <div class="section">
         <h1>${task == null ? "Создать задачу" : "Редактировать задачу"}</h1>
-        <form action="/editor" method="post" class="task-form" style="margin-top:20px;">
+        <form action="${pageContext.request.contextPath}/editor" method="post" class="task-form" style="margin-top:20px;">
             <input type="hidden" name="id" value="${task.id}" />
             <label for="title">Название:</label>
             <input type="text" id="title" name="title" value="${task.title}" required>
@@ -33,7 +33,7 @@
 
             <div class="form-actions" style="margin-top: 20px; display:flex; gap:15px; justify-content:center;">
                 <input type="submit" value="Сохранить" class="submit-btn">
-                <a href="/dashboard" class="cancel-btn">Отмена</a>
+                <a href="${pageContext.request.contextPath}/dashboard" class="cancel-btn">Отмена</a>
             </div>
         </form>
     </div>

@@ -29,9 +29,9 @@ public class SignUpServlet extends HttpServlet {
             req.getRequestDispatcher("jsp/signUp.jsp").forward(req, resp);
         } catch (Exception e) {
             if (e.getMessage().contains("Failed to obtain JDBC Connection")) {
-                resp.sendRedirect("/error?err=Database Connection Failed");
+                resp.sendRedirect(req.getContextPath() + "/error?err=Database Connection Failed");
             } else {
-                resp.sendRedirect("/error?err=Database Error: " + e.getMessage());
+                resp.sendRedirect(req.getContextPath() + "/error?err=Database Error: " + e.getMessage());
             }
         }
 
@@ -48,9 +48,9 @@ public class SignUpServlet extends HttpServlet {
 
         AuthResponse authResponse = userService.signUp(signUpRequest);
         if (authResponse.getStatus() == 0) {
-            resp.sendRedirect("/signIn");
+            resp.sendRedirect(req.getContextPath() + "/signIn");
         } else if (authResponse.getStatus() == 50) {
-            resp.sendRedirect("/error?err=" + authResponse.getStatusDesc());
+            resp.sendRedirect(req.getContextPath() + "/error?err=" + authResponse.getStatusDesc());
         } else {
             req.setAttribute("errorMessage", "Неверные данные");
             req.getRequestDispatcher("jsp/signUp.jsp").forward(req, resp);

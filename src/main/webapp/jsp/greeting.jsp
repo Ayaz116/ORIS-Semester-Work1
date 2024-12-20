@@ -73,8 +73,8 @@
 <body>
 <div class="action-links">
     <h2>Добро пожаловать в Планировщик задач!</h2>
-    <a href="/signUp">Зарегистрироваться</a>
-    <a href="/signIn">Войти</a>
+    <a href="${pageContext.request.contextPath}/signUp">Зарегистрироваться</a>
+    <a href="${pageContext.request.contextPath}/signIn">Войти</a>
 </div>
 </body>
 </html>

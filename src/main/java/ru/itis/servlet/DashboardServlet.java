@@ -30,7 +30,7 @@ public class DashboardServlet extends HttpServlet {
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId == null) {
-            resp.sendRedirect("/signIn");
+            resp.sendRedirect(req.getContextPath() + "/signIn");
             return;
         }
 

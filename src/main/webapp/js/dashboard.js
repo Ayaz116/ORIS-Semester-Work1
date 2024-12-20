@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (sortBy === 'creationDate') {
                 const aid = parseInt(a.dataset.id, 10);
                 const bid = parseInt(b.dataset.id, 10);
-                return aid - bid;
+                return bid - aid;
             }
             return 0;
         });

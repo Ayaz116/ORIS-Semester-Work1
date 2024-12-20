@@ -26,6 +26,6 @@ public class TaskDeleteServlet extends HttpServlet {
             Integer id = Integer.valueOf(idParam);
             taskService.deleteTask(id, userId);
         }
-        resp.sendRedirect("/dashboard");
+        resp.sendRedirect(req.getContextPath() + "/dashboard");
     }
 }

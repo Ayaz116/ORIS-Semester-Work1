@@ -34,7 +34,7 @@ public class EditorServlet extends HttpServlet {
             }
             req.getRequestDispatcher("/jsp/editor.jsp").forward(req, resp);
         } catch (Exception e) {
-            resp.sendRedirect("/error?err=" + e.getMessage());
+            resp.sendRedirect(req.getContextPath() + "/error?err=" + e.getMessage());
         }
     }
 
@@ -46,7 +46,7 @@ public class EditorServlet extends HttpServlet {
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId == null) {
-            resp.sendRedirect("/signIn");
+            resp.sendRedirect(req.getContextPath() + "/signIn");
             return;
         }
 
@@ -78,7 +78,7 @@ public class EditorServlet extends HttpServlet {
         } else {
             taskService.createTask(task);
         }
-        resp.sendRedirect("/dashboard");
+        resp.sendRedirect(req.getContextPath() + "/dashboard");
 
     }
 }

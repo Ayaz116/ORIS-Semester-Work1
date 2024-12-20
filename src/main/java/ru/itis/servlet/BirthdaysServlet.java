@@ -27,7 +27,7 @@ public class BirthdaysServlet extends HttpServlet {
             Long userId = (Long) session.getAttribute("userId");
 
             if (userId == null) {
-                resp.sendRedirect("/signIn");
+                resp.sendRedirect(req.getContextPath() + "/signIn");
                 return;
             }
 
@@ -38,9 +38,9 @@ public class BirthdaysServlet extends HttpServlet {
 
         } catch (Exception e) {
             if (e.getMessage().contains("Failed to obtain JDBC Connection")) {
-                resp.sendRedirect("/error?err=Database Connection Failed");
+                resp.sendRedirect(req.getContextPath() + "/error?err=Database Connection Failed");
             } else {
-                resp.sendRedirect("/error?err=Database Error: " + e.getMessage());
+                resp.sendRedirect(req.getContextPath() + "/error?err=Database Error: " + e.getMessage());
             }
         }
     }
@@ -53,7 +53,7 @@ public class BirthdaysServlet extends HttpServlet {
         Long userId = (Long) session.getAttribute("userId");
 
         if (userId == null) {
-            resp.sendRedirect("/signIn");
+            resp.sendRedirect(req.getContextPath() + "/signIn");
             return;
         }
 
@@ -67,7 +67,7 @@ public class BirthdaysServlet extends HttpServlet {
                 .build();
 
         birthdayService.addBirthday(birthday);
-        resp.sendRedirect("/birthdays");
+        resp.sendRedirect(req.getContextPath() + "/birthdays");
 
     }
 }

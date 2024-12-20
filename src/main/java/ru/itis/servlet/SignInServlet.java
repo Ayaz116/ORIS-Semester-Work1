@@ -40,19 +40,16 @@ public class SignInServlet extends HttpServlet {
 
         AuthResponse authResponse = userService.signIn(signInRequest);
         if (authResponse.getStatus() == 0) {
-
             HttpSession session = req.getSession(true);
             session.setAttribute(AuthFilter.AUTHORIZATION, true);
             session.setAttribute("userId", authResponse.getUser().getId());
             session.setAttribute("userName", authResponse.getUser().getNickname());
-            resp.sendRedirect("/dashboard");
+            resp.sendRedirect(req.getContextPath() + "/dashboard");
         } else if (authResponse.getStatus() == 50) {
-
-            resp.sendRedirect("/error?err=" + authResponse.getStatusDesc());
+            resp.sendRedirect(req.getContextPath() + "/error?err=" + authResponse.getStatusDesc());
         } else {
-
             req.setAttribute("errorMessage", "Неверные данные");
-            req.getRequestDispatcher("jsp/signIn.jsp").forward(req, resp);
+            req.getRequestDispatcher("/jsp/signIn.jsp").forward(req, resp);
         }
 
     }

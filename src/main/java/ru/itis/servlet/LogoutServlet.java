@@ -17,6 +17,6 @@ public class LogoutServlet extends HttpServlet {
             session.removeAttribute("userName");
             session.invalidate();
         }
-        resp.sendRedirect("/");
+        resp.sendRedirect(req.getContextPath() + "/");
     }
 }

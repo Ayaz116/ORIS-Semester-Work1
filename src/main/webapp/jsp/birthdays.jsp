@@ -7,7 +7,7 @@
 <div class="page-container">
     <div class="section">
         <h1>Дни рождения</h1>
-        <form action="/birthdays" method="post" class="birthday-form">
+        <form action="${pageContext.request.contextPath}/birthdays" method="post" class="birthday-form">
             <label for="name">Имя:</label>
             <input type="text" id="name" name="name" required>
 
@@ -21,7 +21,7 @@
             <c:forEach var="birthday" items="${birthdays}">
                 <div class="birthday-item">
                     <span>${birthday.name} - ${birthday.birthDate}</span>
-                    <a href="/birthdays/delete?id=${birthday.id}" class="delete-btn">Удалить</a>
+                    <a href="${pageContext.request.contextPath}/birthdays/delete?id=${birthday.id}" class="delete-btn">Удалить</a>
                 </div>
             </c:forEach>
         </div>

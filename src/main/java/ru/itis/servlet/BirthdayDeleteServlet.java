@@ -26,6 +26,6 @@ public class BirthdayDeleteServlet extends HttpServlet {
             Long id = Long.valueOf(idParam);
             birthdayService.deleteBirthday(id, userId);
         }
-        resp.sendRedirect("/birthdays");
+        resp.sendRedirect(req.getContextPath() + "/birthdays");
     }
 }

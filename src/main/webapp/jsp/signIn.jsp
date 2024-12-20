@@ -76,7 +76,7 @@
     <%= request.getAttribute("errorMessage") %>
   </div>
   <% } %>
-  <form id="signInForm" action="/signIn" method="post">
+  <form id="signInForm" action="${pageContext.request.contextPath}/signIn" method="post">
     <label for="email">Email:</label>
     <input id="email" name="email" type="email" placeholder="email@main.ru" required/>
 
@@ -85,8 +85,8 @@
 
     <input type="submit" value="Войти"/>
   </form>
-  <a href="/signUp">Нет аккаунта? Зарегистрируйтесь</a>
-  <a href="/">Назад на главную</a>
+  <a href="${pageContext.request.contextPath}/signUp">Нет аккаунта? Зарегистрируйтесь</a>
+  <a href="${pageContext.request.contextPath}/">Назад на главную</a>
 </div>
 </body>
 </html>
