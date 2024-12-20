@@ -11,7 +11,6 @@ public class AuthUtils {
     }
 
     public boolean checkPassword(String password) {
-        // Пример: хотя бы одна большая, одна маленькая буква и цифра, длина >=5
         return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{5,}$");
     }
 
